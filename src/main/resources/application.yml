@@ -4,3 +4,5 @@ zeebe:
       gateway-address: 93.84.86.69:26500
     security:
       plaintext: true
+#    message:
+#      time-to-live: 0

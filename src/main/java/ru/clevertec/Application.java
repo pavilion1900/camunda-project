@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.Duration;
+
 @SpringBootApplication
 @EnableZeebeClient
 @RequiredArgsConstructor
@@ -23,12 +25,12 @@ public class Application implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //deploy
         //check http://93.84.86.69:9081/swagger-ui/index.html#/Process/byKey_2
-        DeploymentEvent event = client.newDeployResourceCommand()
-                .addResourceFromClasspath("diagram_01.bpmn")
-                .send()
-                .join();
-        long processDefinitionKey = event.getProcesses().get(0).getProcessDefinitionKey();
-        System.out.println("processDefinitionKey " + processDefinitionKey);
+//        DeploymentEvent event = client.newDeployResourceCommand()
+//                .addResourceFromClasspath("intermsg_01.bpmn")
+//                .send()
+//                .join();
+//        long processDefinitionKey = event.getProcesses().get(0).getProcessDefinitionKey();
+//        System.out.println("processDefinitionKey " + processDefinitionKey);
 
         //start diagram
 //        ProcessInstanceEvent event = client.newCreateInstanceCommand()
@@ -40,5 +42,13 @@ public class Application implements CommandLineRunner {
 //        System.out.println("BpmnProcessId " + event.getBpmnProcessId());
 //        System.out.println("Version " + event.getVersion());
 //        System.out.println("ProcessInstanceKey " + event.getProcessInstanceKey());
+
+        //publish message
+        client.newPublishMessageCommand()
+                .messageName("intermsg_01")
+                .correlationKey("100")
+                .timeToLive(Duration.ZERO)
+                .send()
+                .join();
     }
 }
